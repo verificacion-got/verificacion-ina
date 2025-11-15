@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Validación de Certificado</title>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* 1. Encabezado simple */
+        .header-simple {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex; /* Para alinear el logo */
+            align-items: center; /* Para alinear verticalmente el logo */
+        }
+
+        .header-simple img {
+            /* Ajustamos la altura para el logo */
+            height: 35px; 
+            margin-right: 15px; /* Espacio a la derecha del logo */
+        }
+
+        /* 2. Sección principal (la imagen de fondo) */
+        .hero-section {
+            position: relative;
+            height: 450px;
+            /* Reemplaza esta URL con la imagen de fondo que quieras */
+            background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 3. El filtro de color oscuro sobre la imagen */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Este es el color azul oscuro semitransparente del original */
+            background-color: rgba(0, 42, 85, 0.75);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* 4. La caja de validación */
+        .validator-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 25px 35px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .validator-box p {
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        .validator-box input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+        }
+
+        .validator-box button {
+            background-color: #E60026; /* Color rojo (simulando INACAP) */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .validator-box button:hover {
+            background-color: #c0001f;
+        }
+
+        /* 5. La ventana Modal (emergente) */
+        .modal-overlay {
+            display: none; /* Oculta por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-content h3 {
+            color: #28a745; /* Verde de éxito */
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: #333;
+        }
+
+        /* 6. La tabla de resultados */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Celda de la izquierda (título) */
+        table td:first-child {
+            font-weight: bold;
+            background-color: #f1f1f1;
+            width: 40%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header-simple">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAgVBMVEUAAADa2tpwcHBpaWlOTk7R0dF6enqgoKCvr69nZ2c/Pz9EREQvLy8kJCQPDw+rq6uHh4cBAQE1NTWysrIqKioXFxdQUFBJSUkYGBhZWVl4eHgcHBxMTEwzMzOIiIgiIiJlZWVzc3NkZGRcXFwaGhpISEg7Oztvb283NzcoKCifn59Pzmr6AAAFh0lEQVR4nO2dW3eiOhCGQUSnQkAFxSuItYq11vb7P+GqgKqAQtY2O+e+T0pPZJpEcl8mBwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAr/H69fP7A0hwAIF0X3d3f3fXfR2/5iEEUuP9/YPA9f783j264+sWQigzWOfD8xCxP3/26N4+iL8bJVRGGFs+gogH8/r5g7t7GCH+bpRQGWGs+QgRj+T1t7f37e17FCH+bpRQG2G8+Qh9iHj0/v78/v5BIMTfDRLqJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3gAjtJIzvP0K/h4h3E+I3AiUUl7K51c/L2gEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0L/xH4n1W8Nf3CtoAAAAAElFTkSuQmCC" alt="Logo INACAP">
+        
+    </header>
+
+    <main class="hero-section">
+        <div class="overlay">
+            <h1>Validación de Certificados</h1>
+            <div class="validator-box">
+                <p>Ingrese código de verificación</p>
+                <form id="validationForm">
+                    <input type="text" placeholder="Ej: C4CECC4C9AB14146" id="codeInput">
+                    <button type="submit" id="validateButton">Validar</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-resultado" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-button" id="closeButton">&times;</span>
+            
+            <h3>Certificado Válido</h3>
+            
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Nombre del Participante</td>
+                        <td id="data-nombre">...</td>
+                    </tr>
+                    <tr>
+                        <td>Id Participante</td>
+                        <td id="data-id">...</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre de la Carrera</td> 
+                        <td id="data-carrera-valor">...</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha de Término</td>
+                        <td id="data-fecha">...</td>
+                    </tr>
+                    <tr>
+                        <td>Estado</td>
+                        <td id="data-estado">...</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+    </div>
+
+
+    <script>
+        // 1. Obtener los elementos que necesitamos
+        const validationForm = document.getElementById('validationForm');
+        const codeInput = document.getElementById('codeInput'); // Obtener el campo de texto
+        const modal = document.getElementById('modal-resultado');
+        const closeButton = document.getElementById('closeButton');
+
+        // 2. Función para MOSTRAR el modal
+        function showModal() {
+            modal.style.display = 'flex'; // Muestra la ventana modal
+        }
+
+        // 3. Función para OCULTAR el modal
+        function closeModal() {
+            modal.style.display = 'none'; // Oculta la ventana modal
+        }
+
+        // 4. Nueva función para VALIDAR el código
+        function validateCode(event) {
+            event.preventDefault(); // Evita que la página se recargue
+            
+            const correctCode = "7820415";
+            const enteredCode = codeInput.value.trim(); // Obtener el valor y limpiar espacios
+
+            if (enteredCode === correctCode) {
+                
+                // --- ¡AQUÍ ESTÁ LA MAGIA! ---
+                // Antes de mostrar el modal, actualizamos los datos.
+                
+                document.getElementById('data-nombre').textContent = 'Marcelo Fernando Astete Jiménez';
+                document.getElementById('data-id').textContent = '12.687.723-4';
+                document.getElementById('data-carrera-valor').textContent = 'Técnico en Climatización y Refrigeración con mension en industrial';
+                document.getElementById('data-fecha').textContent = '05 de Julio de 2008';
+                document.getElementById('data-estado').textContent = 'Aprobado';
+                
+                // --- FIN DE LA MAGIA ---
+
+                // Ahora sí, muestra el modal con los datos correctos
+                showModal();
+
+            } else {
+                // Si el código es incorrecto, muestra una alerta
+                alert("Código de verificación incorrecto. Intente de nuevo.");
+            }
+        }
+
+        // 5. Asignar las funciones a los eventos
+        
+        // Cuando se envíe el formulario (clic en "Validar")
+        validationForm.addEventListener('submit', validateCode);
+
+        // Cuando se haga clic en la 'X'
+        closeButton.addEventListener('click', closeModal);
+
+        // Opcional: Cerrar el modal si se hace clic fuera de la ventana
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+    </script>
+    </body>
+</html>
