@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulación de Validación de Certificado</title>
+    <title>Validación de Certificados</title>
     
     <style>
         body {
@@ -18,21 +18,19 @@
             padding: 15px 30px;
             border-bottom: 1px solid #e0e0e0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            display: flex; /* Para alinear el logo */
-            align-items: center; /* Para alinear verticalmente el logo */
+            display: flex;
+            align-items: center;
         }
 
         .header-simple img {
-            /* Ajustamos la altura para el logo */
             height: 35px; 
-            margin-right: 15px; /* Espacio a la derecha del logo */
+            margin-right: 15px;
         }
 
         /* 2. Sección principal (la imagen de fondo) */
         .hero-section {
             position: relative;
             height: 450px;
-            /* Reemplaza esta URL con la imagen de fondo que quieras */
             background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit&crop');
             background-size: cover;
             background-position: center;
@@ -48,7 +46,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Este es el color azul oscuro semitransparente del original */
             background-color: rgba(0, 42, 85, 0.75);
             display: flex;
             flex-direction: column;
@@ -62,53 +59,107 @@
             font-size: 2.5rem;
             font-weight: 300;
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        /* 4. La caja de validación */
-        .validator-box {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 25px 35px;
-            width: 90%;
-            max-width: 500px;
-        }
-
-        .validator-box p {
-            margin-top: 0;
-            font-size: 1rem;
-        }
-
-        .validator-box input[type="text"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-            box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
-        }
-
-        .validator-box button {
-            background-color: #E60026; /* Color rojo (simulando INACAP) */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 4px;
+        /* 4. Estilos del reCAPTCHA FALSO */
+        .captcha-container {
+            background-color: #f9f9f9;
+            border: 1px solid #d3d3d3;
+            border-radius: 3px;
+            width: 300px;
+            height: 74px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            user-select: none;
             cursor: pointer;
-            margin-top: 15px;
-            transition: background-color 0.3s;
+            margin: 0 auto; /* Centrado */
+            color: #000; /* Texto negro dentro del box */
+            position: relative;
+            background-color: white;
         }
 
-        .validator-box button:hover {
-            background-color: #c0001f;
+        .captcha-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #c1c1c1;
+            border-radius: 2px;
+            background-color: white;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .captcha-container:hover .captcha-checkbox {
+            border-color: #b2b2b2;
+        }
+
+        .captcha-label {
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #000;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .captcha-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        /* Icono de recaptcha hecho con CSS puro */
+        .recaptcha-icon {
+            width: 24px;
+            height: 24px;
+            background-image: url('https://www.gstatic.com/recaptcha/api2/logo_48.png');
+            background-size: cover;
+            opacity: 0.6;
+        }
+        
+        .recaptcha-text {
+            font-size: 10px;
+            color: #555;
+            margin-top: 2px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Animación de carga (spinner) */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4285f4; /* Azul Google */
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: none; 
+        }
+
+        /* Check verde */
+        .checkmark {
+            color: #009e55;
+            font-size: 26px;
+            display: none;
+            line-height: 0;
+            position: relative;
+            top: -2px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* 5. La ventana Modal (emergente) */
         .modal-overlay {
-            display: none; /* Oculta por defecto */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
@@ -131,7 +182,7 @@
         }
 
         .modal-content h3 {
-            color: #28a745; /* Verde de éxito */
+            color: #28a745;
             font-size: 1.5rem;
             margin-top: 0;
             border-bottom: 1px solid #eee;
@@ -168,7 +219,6 @@
             background-color: #f9f9f9;
         }
 
-        /* Celda de la izquierda (título) */
         table td:first-child {
             font-weight: bold;
             background-color: #f1f1f1;
@@ -181,19 +231,25 @@
 
     <header class="header-simple">
         <img src="logo-inacap.png" alt="Logo INACAP">
-        
     </header>
 
     <main class="hero-section">
         <div class="overlay">
             <h1>Validación de Certificados</h1>
-            <div class="validator-box">
-                <p>Ingrese código de verificación</p>
-                <form id="validationForm">
-                    <input type="text" placeholder="Ej: C4CECC4C9AB14146" id="codeInput">
-                    <button type="submit" id="validateButton">Validar</button>
-                </form>
+            
+            <div class="captcha-container" onclick="iniciarValidacion(this)">
+                <div class="captcha-checkbox">
+                    <div class="spinner"></div>
+                    <div class="checkmark">✔</div>
+                </div>
+                <div class="captcha-label">No soy un robot</div>
+                <div class="captcha-logo">
+                    <div class="recaptcha-icon"></div>
+                    <div class="recaptcha-text">reCAPTCHA</div>
+                    <div style="font-size: 8px; color: #555; margin-top: 2px;">Privacidad - Términos</div>
+                </div>
             </div>
+
         </div>
     </main>
 
@@ -230,58 +286,56 @@
         </div>
     </div>
 
-
     <script>
-        // 1. Obtener los elementos que necesitamos
-        const validationForm = document.getElementById('validationForm');
-        const codeInput = document.getElementById('codeInput'); // Obtener el campo de texto
         const modal = document.getElementById('modal-resultado');
         const closeButton = document.getElementById('closeButton');
+        let validando = false; // Para evitar doble clic
 
-        // 2. Función para MOSTRAR el modal
-        function showModal() {
-            modal.style.display = 'flex'; // Muestra la ventana modal
+        // Función para MOSTRAR el modal y cargar datos
+        function showModalWithData() {
+            // Llenar datos (simulación)
+            document.getElementById('data-nombre').textContent = 'Marcelo Fernando Astete Jiménez';
+            document.getElementById('data-id').textContent = '12.687.723-4';
+            document.getElementById('data-carrera-valor').textContent = 'Técnico en Climatización y Refrigeración';
+            document.getElementById('data-fecha').textContent = '05 de Julio de 2008';
+            document.getElementById('data-estado').textContent = 'Aprobado';
+
+            // Mostrar
+            modal.style.display = 'flex';
         }
 
-        // 3. Función para OCULTAR el modal
         function closeModal() {
-            modal.style.display = 'none'; // Oculta la ventana modal
+            modal.style.display = 'none';
+            // Opcional: Reiniciar el captcha si se cierra el modal
+            // location.reload(); 
         }
 
-        // 4. Nueva función para VALIDAR el código
-        function validateCode(event) {
-            event.preventDefault(); // Evita que la página se recargue
-            
-            const correctCode = "7820415";
-            const enteredCode = codeInput.value.trim(); // Obtener el valor y limpiar espacios
+        // Lógica del reCAPTCHA falso
+        function iniciarValidacion(elemento) {
+            if (validando) return; // Si ya está corriendo, no hacer nada
+            validando = true;
 
-            if (enteredCode === correctCode) {
-                
-                // Actualizamos los datos
-                document.getElementById('data-nombre').textContent = 'Marcelo Fernando Astete Jiménez';
-                document.getElementById('data-id').textContent = '12.687.723-4';
-                document.getElementById('data-carrera-valor').textContent = 'Técnico en Climatización y Refrigeración';
-                document.getElementById('data-fecha').textContent = '05 de Julio de 2008';
-                document.getElementById('data-estado').textContent = 'Aprobado';
-                
-                // Muestra el modal con los datos correctos
-                showModal();
+            const spinner = elemento.querySelector('.spinner');
+            const checkmark = elemento.querySelector('.checkmark');
 
-            } else {
-                // Si el código es incorrecto, muestra una alerta
-                alert("Código de verificación incorrecto. Intente de nuevo.");
-            }
+            // 1. Mostrar spinner
+            spinner.style.display = 'block';
+
+            // 2. Esperar 1.5 segundos (simular carga)
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                checkmark.style.display = 'block'; // Mostrar check verde
+
+                // 3. Esperar medio segundo más y mostrar el resultado
+                setTimeout(() => {
+                    showModalWithData();
+                }, 600);
+
+            }, 1500);
         }
 
-        // 5. Asignar las funciones a los eventos
-        
-        // Cuando se envíe el formulario (clic en "Validar")
-        validationForm.addEventListener('submit', validateCode);
-
-        // Cuando se haga clic en la 'X'
+        // Eventos del modal
         closeButton.addEventListener('click', closeModal);
-
-        // Opcional: Cerrar el modal si se hace clic fuera de la ventana
         modal.addEventListener('click', function(event) {
             if (event.target === modal) {
                 closeModal();
@@ -292,3 +346,6 @@
 
 </body>
 </html>
+
+
+    
