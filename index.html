@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validación de Certificados</title>
+    <title>Validación de Certificados - Universidad del Mar</title>
     
     <style>
         body {
@@ -31,9 +31,13 @@
         .hero-section {
             position: relative;
             height: 450px;
-            background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit&crop');
+            
+            /* AQUI ESTÁ EL CAMBIO: Se usa la imagen local 'fondo.jpg' */
+            background-image: url('fondo.jpg'); 
+            
             background-size: cover;
-            background-position: center;
+            /* 'top center' ayuda a que se vea mejor la parte del edificio si la imagen es muy alta */
+            background-position: top center; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -46,7 +50,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 42, 85, 0.75);
+            /* Ajusté el color a un azul más acorde a la imagen */
+            background-color: rgba(0, 50, 100, 0.65);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -60,6 +65,7 @@
             font-weight: 300;
             margin-top: 0;
             margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         /* 4. Estilos del reCAPTCHA FALSO */
@@ -75,8 +81,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             user-select: none;
             cursor: pointer;
-            margin: 0 auto; /* Centrado */
-            color: #000; /* Texto negro dentro del box */
+            margin: 0 auto;
+            color: #000;
             position: relative;
             background-color: white;
         }
@@ -114,7 +120,6 @@
             margin-left: 10px;
         }
 
-        /* Icono de recaptcha hecho con CSS puro */
         .recaptcha-icon {
             width: 24px;
             height: 24px;
@@ -131,10 +136,9 @@
             line-height: 1;
         }
 
-        /* Animación de carga (spinner) */
         .spinner {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #4285f4; /* Azul Google */
+            border-top: 3px solid #4285f4;
             border-radius: 50%;
             width: 16px;
             height: 16px;
@@ -142,7 +146,6 @@
             display: none; 
         }
 
-        /* Check verde */
         .checkmark {
             color: #009e55;
             font-size: 26px;
@@ -230,7 +233,8 @@
 <body>
 
     <header class="header-simple">
-        <img src="logo-inacap.png" alt="Logo INACAP">
+        <img src="logo-universidad.png" alt="Logo Universidad" onerror="this.style.display='none'">
+        <h2 style="color:#333; margin-left:10px;">Universidad del Mar</h2>
     </header>
 
     <main class="hero-section">
@@ -289,44 +293,37 @@
     <script>
         const modal = document.getElementById('modal-resultado');
         const closeButton = document.getElementById('closeButton');
-        let validando = false; // Para evitar doble clic
+        let validando = false; 
 
         // Función para MOSTRAR el modal y cargar datos
         function showModalWithData() {
-            // Llenar datos (simulación)
             document.getElementById('data-nombre').textContent = 'Fernando Alejandro Canelo Donoso';
             document.getElementById('data-id').textContent = '16.539.623-5';
             document.getElementById('data-carrera-valor').textContent = 'Técnico en Electricidad y Electrónica';
             document.getElementById('data-fecha').textContent = '05 de Julio de 2009';
             document.getElementById('data-estado').textContent = 'Aprobado';
 
-            // Mostrar
             modal.style.display = 'flex';
         }
 
         function closeModal() {
             modal.style.display = 'none';
-            // Opcional: Reiniciar el captcha si se cierra el modal
-            // location.reload(); 
         }
 
         // Lógica del reCAPTCHA falso
         function iniciarValidacion(elemento) {
-            if (validando) return; // Si ya está corriendo, no hacer nada
+            if (validando) return; 
             validando = true;
 
             const spinner = elemento.querySelector('.spinner');
             const checkmark = elemento.querySelector('.checkmark');
 
-            // 1. Mostrar spinner
             spinner.style.display = 'block';
 
-            // 2. Esperar 1.5 segundos (simular carga)
             setTimeout(() => {
                 spinner.style.display = 'none';
-                checkmark.style.display = 'block'; // Mostrar check verde
+                checkmark.style.display = 'block'; 
 
-                // 3. Esperar medio segundo más y mostrar el resultado
                 setTimeout(() => {
                     showModalWithData();
                 }, 600);
@@ -334,7 +331,6 @@
             }, 1500);
         }
 
-        // Eventos del modal
         closeButton.addEventListener('click', closeModal);
         modal.addEventListener('click', function(event) {
             if (event.target === modal) {
@@ -347,5 +343,3 @@
 </body>
 </html>
 
-
-    
