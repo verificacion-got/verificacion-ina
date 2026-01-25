@@ -1,4 +1,4 @@
-                    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -15,16 +15,16 @@
         /* 1. Encabezado simple */
         .header-simple {
             background-color: #ffffff;
-            padding: 20px 40px; /* Reduje un poco el padding vertical */
+            padding: 20px 40px; 
             border-bottom: 1px solid #e0e0e0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: center;
-            justify-content: center; /* Centra el logo si no hay nada más */
+            justify-content: center; 
         }
 
         .header-simple img {
-            height: 100px; /* Aumenté un poco el tamaño para que se vea bien el logo */
+            height: 100px; 
             display: block;
         }
 
@@ -276,8 +276,20 @@
                         <td id="data-carrera-valor">...</td>
                     </tr>
                     <tr>
+                        <td>Sede</td>
+                        <td id="data-sede">...</td>
+                    </tr>
+                    <tr>
+                        <td>Modalidad</td>
+                        <td id="data-modalidad">...</td>
+                    </tr>
+                    <tr>
                         <td>Fecha de Término</td>
                         <td id="data-fecha">...</td>
+                    </tr>
+                    <tr>
+                        <td>Nota de Aprobación</td>
+                        <td id="data-nota">...</td>
                     </tr>
                     <tr>
                         <td>Estado</td>
@@ -294,10 +306,20 @@
         let validando = false; 
 
         function showModalWithData() {
+            // Datos originales
             document.getElementById('data-nombre').textContent = 'Alvaro Alonso Aguilar Osores';
             document.getElementById('data-id').textContent = '13.355.201-4';
-            document.getElementById('data-carrera-valor').textContent = 'Médico Veterinario ';
+            document.getElementById('data-carrera-valor').textContent = 'Médico Veterinario';
+            
+            // Nuevos datos agregados
+            document.getElementById('data-sede').textContent = 'Reñaca 7 norte 519 viña del mar';
+            document.getElementById('data-modalidad').textContent = 'Diurna';
+            
             document.getElementById('data-fecha').textContent = '28 de Noviembre de 2008';
+            
+            // Nueva nota
+            document.getElementById('data-nota').textContent = '5,5';
+            
             document.getElementById('data-estado').textContent = 'Aprobado';
 
             modal.style.display = 'flex';
@@ -338,3 +360,5 @@
 
 </body>
 </html>
+
+                    
