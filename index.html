@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+                    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -15,16 +15,17 @@
         /* 1. Encabezado simple */
         .header-simple {
             background-color: #ffffff;
-            padding: 35px 40px;
+            padding: 20px 40px; /* Reduje un poco el padding vertical */
             border-bottom: 1px solid #e0e0e0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: center;
+            justify-content: center; /* Centra el logo si no hay nada más */
         }
 
         .header-simple img {
-            height: 80px; 
-            margin-right: 15px;
+            height: 100px; /* Aumenté un poco el tamaño para que se vea bien el logo */
+            display: block;
         }
 
         /* 2. Sección principal */
@@ -32,7 +33,7 @@
             position: relative;
             height: 450px;
             
-            /* CAMBIO REALIZADO: Ahora busca el archivo 'fon.jpg' */
+            /* IMAGEN DE FONDO: fon.jpg */
             background-image: url('fon.jpg'); 
             
             background-size: cover;
@@ -231,8 +232,7 @@
 <body>
 
     <header class="header-simple">
-        <img src="logo-universidad.png" alt="Logo Universidad" onerror="this.style.display='none'">
-        <h2 style="color:#333; margin-left:10px;">Universidad del Mar</h2>
+        <img src="logomar.jpg" alt="Logo Universidad del Mar">
     </header>
 
     <main class="hero-section">
