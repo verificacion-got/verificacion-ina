@@ -27,16 +27,15 @@
             margin-right: 15px;
         }
 
-        /* 2. Sección principal (la imagen de fondo) */
+        /* 2. Sección principal */
         .hero-section {
             position: relative;
             height: 450px;
             
-            /* AQUI ESTÁ EL CAMBIO: Se usa la imagen local 'fondo.jpg' */
-            background-image: url('fondo.jpg'); 
+            /* CAMBIO REALIZADO: Ahora busca el archivo 'fon.jpg' */
+            background-image: url('fon.jpg'); 
             
             background-size: cover;
-            /* 'top center' ayuda a que se vea mejor la parte del edificio si la imagen es muy alta */
             background-position: top center; 
             display: flex;
             align-items: center;
@@ -50,7 +49,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Ajusté el color a un azul más acorde a la imagen */
             background-color: rgba(0, 50, 100, 0.65);
             display: flex;
             flex-direction: column;
@@ -68,7 +66,7 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* 4. Estilos del reCAPTCHA FALSO */
+        /* 4. Estilos del reCAPTCHA */
         .captcha-container {
             background-color: #f9f9f9;
             border: 1px solid #d3d3d3;
@@ -160,7 +158,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* 5. La ventana Modal (emergente) */
+        /* 5. La ventana Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -206,7 +204,7 @@
             color: #333;
         }
 
-        /* 6. La tabla de resultados */
+        /* 6. Tabla de resultados */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -295,7 +293,6 @@
         const closeButton = document.getElementById('closeButton');
         let validando = false; 
 
-        // Función para MOSTRAR el modal y cargar datos
         function showModalWithData() {
             document.getElementById('data-nombre').textContent = 'Fernando Alejandro Canelo Donoso';
             document.getElementById('data-id').textContent = '16.539.623-5';
@@ -310,7 +307,6 @@
             modal.style.display = 'none';
         }
 
-        // Lógica del reCAPTCHA falso
         function iniciarValidacion(elemento) {
             if (validando) return; 
             validando = true;
@@ -342,4 +338,3 @@
 
 </body>
 </html>
-
